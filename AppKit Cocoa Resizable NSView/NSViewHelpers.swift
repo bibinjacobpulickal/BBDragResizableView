@@ -101,6 +101,16 @@ public extension NSView {
         }
     }
 
+    var origin: CGPoint {
+        get {
+            return frame.origin
+        }
+        set {
+            frame.origin.x = newValue.x
+            frame.origin.y = newValue.y
+        }
+    }
+
     var size: CGSize {
         get {
             return frame.size

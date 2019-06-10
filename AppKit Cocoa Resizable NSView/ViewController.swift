@@ -9,9 +9,17 @@
 import Cocoa
 
 class ViewController: NSViewController {
+
+    private let resizableView = ResizableView()
+
     override func loadView() {
         view        = NSView()
-        let resizableView = ResizableView(frame: NSRect(x: 100, y: 100, width: 100, height: 100))
         view.addSubview(resizableView)
+        view.addSubview(NSButton(title: "RESET", target: self, action: #selector(resetFrame)))
+        resetFrame()
+    }
+
+    @objc func resetFrame() {
+        resizableView.frame = NSRect(x: 100, y: 200, width: 100, height: 100)
     }
 }

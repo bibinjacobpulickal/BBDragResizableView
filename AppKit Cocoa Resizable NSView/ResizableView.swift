@@ -10,56 +10,97 @@ import Cocoa
 
 class ResizableView: NSView {
 
+    private let resizableArea: CGFloat = 2
+    private var draggedPoint        = CGPoint.zero
+
     override init(frame frameRect: NSRect) {
         super.init(frame: frameRect)
         setBackgroundColor(.red)
+        borderColor     = .white
+        borderWidth     = resizableArea
     }
 
-    override func draw(_ dirtyRect: NSRect) {
-        super.draw(dirtyRect)
-        addTrackingRect(dirtyRect)
+    override func updateTrackingAreas() {
+        super.updateTrackingAreas()
+        trackingAreas.forEach { area in
+            removeTrackingArea(area)
+        }
+        addTrackingRect(bounds)
     }
 
     required init?(coder decoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    override func mouseEntered(with event: NSEvent) {
-        super.mouseEntered(with: event)
-        borderColor     = .white
-        borderWidth     = 4
-        setBackgroundColor(.green)
-    }
-
     override func mouseExited(with event: NSEvent) {
         super.mouseExited(with: event)
-        borderWidth     = 0
-        setBackgroundColor(.red)
         NSCursor.arrow.set()
+    }
+
+    override func mouseDown(with event: NSEvent) {
+        super.mouseDown(with: event)
+        let locationInView = convert(event.locationInWindow, from: nil)
+        draggedPoint            = locationInView
+    }
+
+    override func mouseUp(with event: NSEvent) {
+        super.mouseUp(with: event)
+        draggedPoint = .zero
     }
 
     override func mouseMoved(with event: NSEvent) {
         super.mouseMoved(with: event)
-        setBackgroundColor(.green)
         let locationInView = convert(event.locationInWindow, from: nil)
-        if locationInView.x < 4 || locationInView.x > bounds.width - 4 {
-            NSCursor.resizeLeftRight.set()
-        } else if locationInView.y < 4 || locationInView.y > bounds.height - 4 {
-            NSCursor.resizeUpDown.set()
-        } else {
-            NSCursor.arrow.set()
-            setBackgroundColor(.red)
-        }
+        cursorBorderPosition(locationInView)
     }
 
     override func mouseDragged(with event: NSEvent) {
         super.mouseDragged(with: event)
-        let locationInView = convert(event.locationInWindow, from: nil)
-        if locationInView.x < 4 || locationInView.x > bounds.width - 4 ||
-            locationInView.y < 4 || locationInView.y > bounds.height - 4 {
-            setBackgroundColor(.yellow)
-        } else {
-            setBackgroundColor(.red)
+        borderWidth                     = resizableArea
+        let locationInView              = convert(event.locationInWindow, from: nil)
+        let horizontalDistanceDragged   = locationInView.x - draggedPoint.x
+        let verticalDistanceDragged     = locationInView.y - draggedPoint.y
+        let cursorPosition              = cursorBorderPosition(draggedPoint)
+        switch cursorPosition {
+        case .top:
+            size.height += verticalDistanceDragged
+            draggedPoint = locationInView
+        case .left:
+            origin.x    += horizontalDistanceDragged
+            size.width  -= horizontalDistanceDragged
+        case .bottom:
+            origin.y    += verticalDistanceDragged
+            size.height -= verticalDistanceDragged
+        case .right:
+            size.width  += horizontalDistanceDragged
+            draggedPoint = locationInView
+        case .none:
+            print(locationInView)
+            break
         }
+    }
+
+    @discardableResult
+    func cursorBorderPosition(_ locationInView: CGPoint) -> BorderPosition {
+        if locationInView.x < resizableArea {
+            NSCursor.resizeLeftRight.set()
+            return .left
+        } else if locationInView.x > bounds.width - resizableArea {
+            NSCursor.resizeLeftRight.set()
+            return .right
+        } else if locationInView.y < resizableArea {
+            NSCursor.resizeUpDown.set()
+            return .bottom
+        } else if locationInView.y > bounds.height - resizableArea {
+            NSCursor.resizeUpDown.set()
+            return .top
+        } else {
+            NSCursor.arrow.set()
+            return .none
+        }
+    }
+
+    enum BorderPosition {
+        case top, left, bottom, right, none
     }
 }
