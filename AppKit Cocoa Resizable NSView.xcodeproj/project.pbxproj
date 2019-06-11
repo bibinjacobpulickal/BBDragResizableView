@@ -14,6 +14,7 @@
 		AD2713FB22A94AB0004A042C /* NSViewHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD2713F722A94AAF004A042C /* NSViewHelpers.swift */; };
 		AD2713FD22A94AEF004A042C /* ResizableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD2713FC22A94AEF004A042C /* ResizableView.swift */; };
 		AD2713FF22A94B11004A042C /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD2713FE22A94B11004A042C /* ViewController.swift */; };
+		AD27145822AF69C7004A042C /* DraggableResizableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD27145722AF69C7004A042C /* DraggableResizableView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -27,6 +28,7 @@
 		AD2713F722A94AAF004A042C /* NSViewHelpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSViewHelpers.swift; sourceTree = "<group>"; };
 		AD2713FC22A94AEF004A042C /* ResizableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResizableView.swift; sourceTree = "<group>"; };
 		AD2713FE22A94B11004A042C /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		AD27145722AF69C7004A042C /* DraggableResizableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DraggableResizableView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -63,6 +65,7 @@
 				AD2713F622A94AAF004A042C /* AppDelegate.swift */,
 				AD2713FE22A94B11004A042C /* ViewController.swift */,
 				AD2713FC22A94AEF004A042C /* ResizableView.swift */,
+				AD27145722AF69C7004A042C /* DraggableResizableView.swift */,
 				AD2713F422A94AAF004A042C /* LayoutHelper.swift */,
 				AD2713F722A94AAF004A042C /* NSViewHelpers.swift */,
 				AD2713E822A94A72004A042C /* Assets.xcassets */,
@@ -146,6 +149,7 @@
 				AD2713FD22A94AEF004A042C /* ResizableView.swift in Sources */,
 				AD2713FA22A94AB0004A042C /* AppDelegate.swift in Sources */,
 				AD2713FB22A94AB0004A042C /* NSViewHelpers.swift in Sources */,
+				AD27145822AF69C7004A042C /* DraggableResizableView.swift in Sources */,
 				AD2713F922A94AB0004A042C /* main.swift in Sources */,
 				AD2713F822A94AB0004A042C /* LayoutHelper.swift in Sources */,
 			);

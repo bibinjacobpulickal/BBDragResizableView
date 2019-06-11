@@ -10,7 +10,7 @@ import Cocoa
 
 class ViewController: NSViewController {
 
-    private let resizableView = ResizableView()
+    private let resizableView = DraggableResizableView()
 
     override func loadView() {
         view        = NSView()

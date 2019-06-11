@@ -1,14 +1,14 @@
 //
-//  ResizableView.swift
+//  DraggableResizableView.swift
 //  AppKit Cocoa Resizable NSView
 //
-//  Created by Bibin Jacob Pulickal on 06/06/19.
+//  Created by Bibin Jacob Pulickal on 11/06/19.
 //  Copyright © 2019 Bibin Jacob Pulickal. All rights reserved.
 //
 
 import Cocoa
 
-class ResizableView: NSView {
+class DraggableResizableView: NSView {
 
     private let resizableArea   = CGFloat(2)
     private var draggedPoint    = CGPoint.zero
@@ -16,8 +16,6 @@ class ResizableView: NSView {
     override init(frame frameRect: NSRect) {
         super.init(frame: frameRect)
         setBackgroundColor(.red)
-        borderColor     = .white
-        borderWidth     = resizableArea
     }
 
     override func updateTrackingAreas() {
@@ -32,9 +30,17 @@ class ResizableView: NSView {
         fatalError("init(coder:) has not been implemented")
     }
 
+    override func mouseEntered(with event: NSEvent) {
+        super.mouseEntered(with: event)
+        borderColor     = .white
+        borderWidth     = resizableArea
+    }
+
     override func mouseExited(with event: NSEvent) {
         super.mouseExited(with: event)
         NSCursor.arrow.set()
+        borderColor     = .clear
+        borderWidth     = 0
     }
 
     override func mouseDown(with event: NSEvent) {
@@ -63,7 +69,7 @@ class ResizableView: NSView {
         let cursorPosition              = cursorBorderPosition(draggedPoint)
         if cursorPosition != .none {
             let drag    = CGPoint(x: horizontalDistanceDragged, y: verticalDistanceDragged)
-            if checkIfBorder(cursorPosition, exceedsSuperviewBorderWithPadding: 12, andDraggedOutward: drag) {
+            if checkIfBorder(cursorPosition, touchesSuperviewBorderWithPadding: 12, andDraggedOutward: drag) {
                 return
             }
         }
@@ -81,7 +87,9 @@ class ResizableView: NSView {
             size.width  += horizontalDistanceDragged
             draggedPoint = locationInView
         case .none:
-            break
+            origin.x    += locationInView.x - draggedPoint.x
+            origin.y    += locationInView.y - draggedPoint.y
+            repositionView(withPadding: 12)
         }
     }
 
@@ -105,8 +113,12 @@ class ResizableView: NSView {
         }
     }
 
+    enum BorderPosition {
+        case top, left, bottom, right, none
+    }
+
     private func checkIfBorder(_ border: BorderPosition,
-                               exceedsSuperviewBorderWithPadding padding: CGFloat,
+                               touchesSuperviewBorderWithPadding padding: CGFloat,
                                andDraggedOutward drag: CGPoint) -> Bool {
         if border == .left && frame.minX <= padding && drag.x < 0 {
             return true
@@ -124,7 +136,19 @@ class ResizableView: NSView {
         return false
     }
 
-    enum BorderPosition {
-        case top, left, bottom, right, none
+    private func repositionView(withPadding padding: CGFloat) {
+        if frame.minX < padding {
+            origin.x    = padding
+        }
+        if frame.minY < padding {
+            origin.y    = padding
+        }
+        guard let superView = superview else { return }
+        if frame.maxX > superView.frame.maxX - padding {
+            origin.x    = superView.frame.maxX - frame.width - padding
+        }
+        if frame.maxY > superView.frame.maxY - padding {
+            origin.y    = superView.frame.maxY - frame.height - padding
+        }
     }
 }
