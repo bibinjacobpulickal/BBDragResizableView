@@ -13,6 +13,56 @@ import Cocoa
 public extension NSView {
 
     @IBInspectable
+    var backgroundColor: NSColor? {
+        get {
+            guard let color = layer?.backgroundColor else { return nil }
+            return NSColor(cgColor: color)
+        }
+        set {
+            wantsLayer = true
+            layer?.backgroundColor = newValue?.cgColor
+        }
+    }
+
+    var origin: CGPoint {
+        get {
+            frame.origin
+        }
+        set {
+            frame.origin.x = newValue.x
+            frame.origin.y = newValue.y
+        }
+    }
+
+    var size: CGSize {
+        get {
+            frame.size
+        }
+        set {
+            width = newValue.width
+            height = newValue.height
+        }
+    }
+
+    var width: CGFloat {
+        get {
+            frame.size.width
+        }
+        set {
+            frame.size.width = newValue
+        }
+    }
+
+    var height: CGFloat {
+        get {
+            frame.size.height
+        }
+        set {
+            frame.size.height = newValue
+        }
+    }
+
+    @IBInspectable
     var borderColor: NSColor? {
         get {
             guard let color = layer?.borderColor else { return nil }
@@ -27,7 +77,7 @@ public extension NSView {
     @IBInspectable
     var borderWidth: CGFloat {
         get {
-            return layer?.borderWidth ?? 0
+            layer?.borderWidth ?? 0
         }
         set {
             wantsLayer = true
@@ -38,21 +88,12 @@ public extension NSView {
     @IBInspectable
     var cornerRadius: CGFloat {
         get {
-            return layer?.cornerRadius ?? 0
+            layer?.cornerRadius ?? 0
         }
         set {
             wantsLayer = true
             layer?.masksToBounds = true
             layer?.cornerRadius = abs(CGFloat(Int(newValue * 100)) / 100)
-        }
-    }
-
-    var height: CGFloat {
-        get {
-            return frame.size.height
-        }
-        set {
-            frame.size.height = newValue
         }
     }
 
@@ -71,7 +112,7 @@ public extension NSView {
     @IBInspectable
     var shadowOffset: CGSize {
         get {
-            return layer?.shadowOffset ?? CGSize.zero
+            layer?.shadowOffset ?? CGSize.zero
         }
         set {
             wantsLayer = true
@@ -82,7 +123,7 @@ public extension NSView {
     @IBInspectable
     var shadowOpacity: Float {
         get {
-            return layer?.shadowOpacity ?? 0
+            layer?.shadowOpacity ?? 0
         }
         set {
             wantsLayer = true
@@ -98,76 +139,6 @@ public extension NSView {
         set {
             wantsLayer = true
             layer?.shadowRadius = newValue
-        }
-    }
-
-    var origin: CGPoint {
-        get {
-            return frame.origin
-        }
-        set {
-            frame.origin.x = newValue.x
-            frame.origin.y = newValue.y
-        }
-    }
-
-    var size: CGSize {
-        get {
-            return frame.size
-        }
-        set {
-            width = newValue.width
-            height = newValue.height
-        }
-    }
-
-    var width: CGFloat {
-        get {
-            return frame.size.width
-        }
-        set {
-            frame.size.width = newValue
-        }
-    }
-}
-
-// MARK: - Methods
-extension NSView {
-
-    func addSubviews(_ subviews: [NSView]) {
-        subviews.forEach { addSubview($0) }
-    }
-
-    func removeSubviews() {
-        subviews.forEach { $0.removeFromSuperview() }
-    }
-
-    func setBackgroundColor(_ color: NSColor) {
-        wantsLayer              = true
-        layer?.backgroundColor  = color.cgColor
-    }
-
-    func showShadow(_ bool: Bool = true, color: NSColor = .black, radius: CGFloat = 1, opacity: Float = 0.5) {
-        if bool {
-            wantsLayer              = true
-            shadow                  = NSShadow()
-            layer?.shadowColor      = color.cgColor
-            layer?.shadowOffset     = .zero
-            layer?.shadowRadius     = radius
-            layer?.shadowOpacity    = opacity
-        } else {
-            shadow                  = nil
-            layer?.shadowOpacity    = 0
-            layer?.shadowRadius     = 0
-            layer?.shadowColor      = NSColor.clear.cgColor
-        }
-    }
-
-    func roundCorners(radius: CGFloat?, corners: CACornerMask) {
-        wantsLayer                  = true
-        layer?.cornerRadius         = radius ?? bounds.height/2
-        if !corners.isEmpty {
-            layer?.maskedCorners    = corners
         }
     }
 

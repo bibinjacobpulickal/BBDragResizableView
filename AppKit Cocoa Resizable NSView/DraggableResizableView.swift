@@ -15,7 +15,7 @@ class DraggableResizableView: NSView {
 
     override init(frame frameRect: NSRect) {
         super.init(frame: frameRect)
-        setBackgroundColor(.red)
+        backgroundColor = .red
     }
 
     override func updateTrackingAreas() {
