@@ -7,6 +7,7 @@
 //
 
 import Cocoa
+import AutoLayoutProxy
 
 class ViewController: NSViewController {
 
@@ -14,8 +15,11 @@ class ViewController: NSViewController {
 
     override func loadView() {
         view        = NSView()
+        view.size >= 500
+        view.addSubview(NSButton(title: "RESET", target: self, action: #selector(resetFrame))) {
+            $0.centerX == $1.centerX
+        }
         view.addSubview(resizableView)
-        view.addSubview(NSButton(title: "RESET", target: self, action: #selector(resetFrame)))
         resetFrame()
     }
 
