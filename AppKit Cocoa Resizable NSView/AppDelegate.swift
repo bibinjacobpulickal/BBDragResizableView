@@ -13,7 +13,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     var window: NSWindow!
 
     func applicationDidFinishLaunching(_ aNotification: Notification) {
-        window = NSWindow(contentViewController: ContentViewController())
+        window = NSWindow(contentViewController: ViewController())
         window?.makeKeyAndOrderFront(nil)
         setCustomToolBar()
     }
@@ -27,19 +27,3 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         window?.toolbar = customToolbar
     }
 }
-
-class ContentViewController: NSSplitViewController {
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        addSplitViewItem(NSSplitViewItem(sidebarWithViewController: SideBarViewController()))
-        addSplitViewItem(NSSplitViewItem(viewController: ViewController()))
-    }
-}
-
-class SideBarViewController: NSViewController {
-    override func loadView() {
-        view        = NSView()
-        view.anchor(lhs: .width, rhs: 200)
-    }
-}
-
