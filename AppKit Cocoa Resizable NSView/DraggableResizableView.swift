@@ -10,7 +10,7 @@ import Cocoa
 
 class DraggableResizableView: NSView {
 
-    private let resizableArea: CGFloat = 2
+    private let resizableArea: CGFloat = 4
     private let borderPadding: CGFloat = 32
     private var draggedPoint: CGPoint  = .zero
 
@@ -33,13 +33,15 @@ class DraggableResizableView: NSView {
 
     override func mouseEntered(with event: NSEvent) {
         super.mouseEntered(with: event)
+        backgroundColor = .green
         borderColor     = .white
-        borderWidth     = resizableArea
+        borderWidth     = 1
     }
 
     override func mouseExited(with event: NSEvent) {
         super.mouseExited(with: event)
         NSCursor.arrow.set()
+        backgroundColor = .red
         borderColor     = .clear
         borderWidth     = 0
     }
@@ -63,7 +65,8 @@ class DraggableResizableView: NSView {
 
     override func mouseDragged(with event: NSEvent) {
         super.mouseDragged(with: event)
-        borderWidth                     = resizableArea
+        backgroundColor                 = .green
+        borderWidth                     = 1
         let locationInView              = convert(event.locationInWindow, from: nil)
         let horizontalDistanceDragged   = locationInView.x - draggedPoint.x
         let verticalDistanceDragged     = locationInView.y - draggedPoint.y
