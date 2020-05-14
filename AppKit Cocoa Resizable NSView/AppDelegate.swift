@@ -10,20 +10,20 @@ import Cocoa
 
 class AppDelegate: NSObject, NSApplicationDelegate {
 
-    var window: NSWindow!
+    var window: NSWindow?
 
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         window = NSWindow(contentViewController: ViewController())
         window?.makeKeyAndOrderFront(nil)
-        setCustomToolBar()
+        setupWindowProperties()
     }
 
-    func setCustomToolBar() {
-        let customToolbar = NSToolbar()
-        customToolbar.showsBaselineSeparator = false
-        window?.titlebarAppearsTransparent = true
-        window?.titleVisibility = .hidden
+    func setupWindowProperties() {
+        window?.toolbar?.showsBaselineSeparator = false
+        window?.titlebarAppearsTransparent   = true
+        window?.titleVisibility              = .hidden
+        window?.isMovableByWindowBackground  = true
         window?.styleMask.insert(.fullSizeContentView)
-        window?.toolbar = customToolbar
+        window?.center()
     }
 }
