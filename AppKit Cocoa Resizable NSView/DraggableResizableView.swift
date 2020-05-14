@@ -10,8 +10,9 @@ import Cocoa
 
 class DraggableResizableView: NSView {
 
-    private let resizableArea   = CGFloat(2)
-    private var draggedPoint    = CGPoint.zero
+    private let resizableArea: CGFloat = 2
+    private let borderPadding: CGFloat = 32
+    private var draggedPoint: CGPoint  = .zero
 
     override init(frame frameRect: NSRect) {
         super.init(frame: frameRect)
@@ -69,7 +70,7 @@ class DraggableResizableView: NSView {
         let cursorPosition              = cursorBorderPosition(draggedPoint)
         if cursorPosition != .none {
             let drag    = CGPoint(x: horizontalDistanceDragged, y: verticalDistanceDragged)
-            if checkIfBorder(cursorPosition, touchesSuperviewBorderWithPadding: 12, andDraggedOutward: drag) {
+            if checkIfBorder(cursorPosition, andDraggedOutward: drag) {
                 return
             }
         }
@@ -89,7 +90,7 @@ class DraggableResizableView: NSView {
         case .none:
             origin.x    += locationInView.x - draggedPoint.x
             origin.y    += locationInView.y - draggedPoint.y
-            repositionView(withPadding: 12)
+            repositionView()
         }
     }
 
@@ -118,37 +119,36 @@ class DraggableResizableView: NSView {
     }
 
     private func checkIfBorder(_ border: BorderPosition,
-                               touchesSuperviewBorderWithPadding padding: CGFloat,
                                andDraggedOutward drag: CGPoint) -> Bool {
-        if border == .left && frame.minX <= padding && drag.x < 0 {
+        if border == .left && frame.minX <= borderPadding && drag.x < 0 {
             return true
         }
-        if border == .bottom && frame.minY <= padding && drag.y < 0 {
+        if border == .bottom && frame.minY <= borderPadding && drag.y < 0 {
             return true
         }
         guard let superView = superview else { return false }
-        if border == .right && frame.maxX >= superView.frame.maxX - padding && drag.x > 0 {
+        if border == .right && frame.maxX >= superView.frame.maxX - borderPadding && drag.x > 0 {
             return true
         }
-        if border == .top && frame.maxY >= superView.frame.maxY - padding && drag.y > 0 {
+        if border == .top && frame.maxY >= superView.frame.maxY - borderPadding && drag.y > 0 {
             return true
         }
         return false
     }
 
-    private func repositionView(withPadding padding: CGFloat) {
-        if frame.minX < padding {
-            origin.x    = padding
+    private func repositionView() {
+        if frame.minX < borderPadding {
+            origin.x    = borderPadding
         }
-        if frame.minY < padding {
-            origin.y    = padding
+        if frame.minY < borderPadding {
+            origin.y    = borderPadding
         }
         guard let superView = superview else { return }
-        if frame.maxX > superView.frame.maxX - padding {
-            origin.x    = superView.frame.maxX - frame.width - padding
+        if frame.maxX > superView.frame.maxX - borderPadding {
+            origin.x    = superView.frame.maxX - frame.width - borderPadding
         }
-        if frame.maxY > superView.frame.maxY - padding {
-            origin.y    = superView.frame.maxY - frame.height - padding
+        if frame.maxY > superView.frame.maxY - borderPadding {
+            origin.y    = superView.frame.maxY - frame.height - borderPadding
         }
     }
 }
