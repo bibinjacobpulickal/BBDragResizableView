@@ -11,7 +11,7 @@ import AutoLayoutProxy
 
 class ViewController: NSViewController {
 
-    private let resizableView = DraggableResizableView()
+    private let draggableResizableView = DraggableResizableView()
 
     override func loadView() {
         view        = NSView()
@@ -19,11 +19,20 @@ class ViewController: NSViewController {
         view.addSubview(NSButton(title: "RESET", target: self, action: #selector(resetFrame))) {
             $0.centerX == $1.centerX
         }
-        view.addSubview(resizableView)
-        resetFrame()
+        view.addSubview(draggableResizableView)
+    }
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        perform(#selector(resetFrame), with: nil, afterDelay: 1)
     }
 
     @objc func resetFrame() {
-        resizableView.frame = NSRect(x: 100, y: 200, width: 100, height: 100)
+        let width                               = view.bounds.width / 5
+        let height                              = view.bounds.height / 5
+        let x                                   = (view.bounds.width - width) * 0.5
+        let y                                   = (view.bounds.height - height) * 0.5
+        draggableResizableView.frame            = CGRect(x: x, y: y, width: width, height: height)
+        draggableResizableView.autoresizingMask = [.minXMargin, .minYMargin, .maxXMargin, .maxYMargin]
     }
 }
