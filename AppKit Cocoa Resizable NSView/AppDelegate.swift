@@ -18,6 +18,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         setupWindowProperties()
     }
 
+    func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool { true }
+
     func setupWindowProperties() {
         window?.toolbar?.showsBaselineSeparator = false
         window?.titlebarAppearsTransparent   = true
